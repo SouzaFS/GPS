@@ -1,4 +1,12 @@
+using GPS.DBContext;
+using GPS.Models;
+using GPS.Repositories;
+using GPS.Repositories.Interfaces;
+using GPS.Services;
+using GPS.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +16,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<AppDBContext>(options =>
+{
+    var configuration = builder.Configuration;
+    string connectionString = configuration["ConnectionStrings:MongoDB"];
+    var mongoClient = new MongoClient(connectionString);
+    options.UseMongoDB(mongoClient, "GPS_DB");
+});
+
+builder.Services.AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -21,7 +40,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

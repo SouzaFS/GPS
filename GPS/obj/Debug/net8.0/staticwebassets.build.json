@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "GH0zVucV9d1mBmNW2xHmnvh2q+sPN9NurYEe45hdtOs=",
+  "Hash": "0n8AqGInrU3j2WTivxLk6jsqs58F5qF7o4j++YfWTo0=",
   "Source": "GPS",
   "BasePath": "_content/GPS",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

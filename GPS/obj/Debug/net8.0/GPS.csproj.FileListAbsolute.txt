@@ -30,3 +30,7 @@ F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\refint\GPS.dl
 F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\GPS.pdb
 F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\GPS.genruntimeconfig.cache
 F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\ref\GPS.dll
+F:\Documentos\Projetos\Development\Github\GPS\GPS\bin\Debug\net8.0\GPS.staticwebassets.endpoints.json
+F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\GPS.sourcelink.json
+F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+F:\Documentos\Projetos\Development\Github\GPS\GPS\obj\Debug\net8.0\staticwebassets\msbuild.GPS.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
