@@ -38,7 +38,7 @@ services:
     build:
       context: .
     environment:
-      MONGODB_URL: mongodb://mongo:27017/
+      MONGODB_URL: 'mongodb://mongo:27017'
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
       ASPNETCORE_ENVIRONMENT: Development

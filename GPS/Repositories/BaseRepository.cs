@@ -20,7 +20,7 @@ namespace GPS.Repositories{
 
         public async Task<T> CreateAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            await table.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }

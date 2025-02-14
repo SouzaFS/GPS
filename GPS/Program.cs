@@ -1,11 +1,11 @@
 using GPS.DBContext;
+using GPS.GraphQL;
 using GPS.Models;
 using GPS.Repositories;
 using GPS.Repositories.Interfaces;
 using GPS.Services;
 using GPS.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,11 +22,14 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     var configuration = builder.Configuration;
     string connectionString = configuration["ConnectionStrings:MongoDB"];
     var mongoClient = new MongoClient(connectionString);
-    options.UseMongoDB(mongoClient, "GPS_DB");
+    options.UseMongoDB(mongoClient, "gps_database");
 });
 
 builder.Services.AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddGraphQLServer()
+    .AddQueryType<Query>();
 
 var app = builder.Build();
 
@@ -45,5 +48,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGraphQL();
 
 app.Run();
