@@ -10,6 +10,7 @@ namespace GPS.DBContext{
         {
 
         }
+
         public AppDBContext(DbContextOptions<AppDBContext> options)
         : base(options)
         {
@@ -19,7 +20,10 @@ namespace GPS.DBContext{
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<UserModel>().ToCollection("Users");
+            modelBuilder.Entity<UserModel>()
+                .ToCollection("Users")
+                .Property(e => e.Id) //Added to Create Id when Adding new Users to the Database. Error Solved: Primary Key is Null!
+                .ValueGeneratedOnAdd();
         }
     }
 }
