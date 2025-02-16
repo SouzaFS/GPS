@@ -4,6 +4,7 @@ namespace GPS.Models{
     public class UserModel{
 
         [BsonId]
+        [GraphQLType(typeof(IdType))]
         public string Id {get; set; }
 
         [BsonElement("FirstName")]

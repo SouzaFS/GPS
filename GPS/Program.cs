@@ -1,5 +1,5 @@
 using GPS.DBContext;
-using GPS.GraphQL;
+using GPS.GraphQL.Queries;
 using GPS.Models;
 using GPS.Repositories;
 using GPS.Repositories.Interfaces;
@@ -25,11 +25,15 @@ builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseMongoDB(mongoClient, "gps_database");
 });
 
+//REST API Scoped's
 builder.Services.AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+
+//GraphQL Scoped's
+builder.Services.AddScoped<Users>();
 builder.Services.AddGraphQLServer()
-    .AddQueryType<Query>();
+    .AddQueryType<Users>();
 
 var app = builder.Build();
 
