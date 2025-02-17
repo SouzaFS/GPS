@@ -15,7 +15,7 @@ services:
       - mongo
     depends_on:
       mongo:
-        condition: service_started
+        condition: service_healthy
     networks:
       - api-network
 
@@ -28,8 +28,10 @@ services:
       MONGO_INITDB_DATABASE: 'gps_database'
     ports:
       - "27017:27017"
-    volumes:
-      - ./MongoDB:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+    #volumes:
+    #  - ./MongoDB:/data/db
     networks:
       - api-network
 
@@ -44,7 +46,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
     depends_on:
       mongo:
-        condition: service_started
+        condition: service_healthy
     networks:
       - api-network
     links:

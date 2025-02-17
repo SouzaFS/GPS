@@ -1,5 +1,6 @@
 using GPS.DBContext;
-using GPS.GraphQL.Queries;
+using GPS.GraphQL.Interfaces;
+using GPS.GraphQL;
 using GPS.Models;
 using GPS.Repositories;
 using GPS.Repositories.Interfaces;
@@ -17,12 +18,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
     var configuration = builder.Configuration;
     string connectionString = configuration["ConnectionStrings:MongoDB"];
     var mongoClient = new MongoClient(connectionString);
     options.UseMongoDB(mongoClient, "gps_database");
+    options.EnableServiceProviderCaching(false); //fix the problem of +20 requests resulting in error of More than 20 IServiceProvider instances have been created
+    
 });
 
 //REST API Scoped's
@@ -31,9 +36,13 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 
 //GraphQL Scoped's
-builder.Services.AddScoped<Users>();
+builder.Services.AddScoped<IUserMutation, UserMutation>();
+builder.Services.AddScoped<IUserQuery, UserQuery>();
 builder.Services.AddGraphQLServer()
-    .AddQueryType<Users>();
+    .AddQueryType(d => d.Name("Query"))
+        .AddTypeExtension<UserQuery>()
+    .AddMutationType(d => d.Name("Mutation"))
+        .AddTypeExtension<UserMutation>();
 
 var app = builder.Build();
 
