@@ -1,51 +1,66 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using GPS.DBContext;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace GPS.Repositories{
     public class BaseRepository <T> : IBaseRepository <T> where T : class
     {
-        private readonly AppDBContext _dbContext;
-        private readonly DbSet<T> table = null;
-        public BaseRepository(AppDBContext dbContext)
-        {
+        private readonly AppDBContext<T> _dbContext;
+        private readonly IMongoCollection<T> collection;
+
+        public BaseRepository(AppDBContext<T> dbContext){
             _dbContext = dbContext;
-            table = _dbContext.Set<T>();
+            collection = _dbContext.GetCollection();
         }
 
         public async Task<T> CreateAsync(T entity)
         {
-            await table.AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            await collection.InsertOneAsync(entity);
             return entity;
-        }
-
-        public IQueryable<T> GetAll()
-        {
-            return table.AsNoTracking();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            await table.Remove(entity).Context.SaveChangesAsync();
+            var idProperty = entity.GetType().GetProperty("Id");
+            if (idProperty == null)
+            {
+                throw new InvalidOperationException("The entity does not have an 'Id' property.");
+            }
+            var idValue = idProperty.GetValue(entity);
+            if (idValue == null)
+            {
+                throw new InvalidOperationException("The 'Id' property value is null.");
+            }
+            await collection.DeleteOneAsync(Builders<T>.Filter.Eq("Id", idValue));
+        }
+
+        public IQueryable<T> GetAll()
+        {
+            return collection.AsQueryable();
         }
 
         public IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate)
         {
-            return table.Where(predicate).AsNoTracking();
+            return collection.AsQueryable().Where(predicate);
         }
 
         public async Task<T> UpdateAsync(T entity)
         {
-            await table.Update(entity).Context.SaveChangesAsync();
-
+            var idProperty = entity.GetType().GetProperty("Id");
+            if (idProperty == null)
+            {
+                throw new InvalidOperationException("The entity does not have an 'Id' property.");
+            }
+            var idValue = idProperty.GetValue(entity);
+            
+            await collection.ReplaceOneAsync(Builders<T>.Filter.Eq("Id", idValue), entity);
             return entity;
         }
+
     }
 
 }

@@ -1,29 +1,21 @@
 using GPS.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace GPS.DBContext{
 
-    public class AppDBContext : DbContext{
-        public AppDBContext()
-        {
+    public class AppDBContext<T> where T : class {
+        
+        private readonly IMongoCollection<T> _collection;
 
+        public AppDBContext(IOptions<DBSettings> settings){
+            var client = new MongoClient(settings.Value.ConnectionString);
+            var database = client.GetDatabase(settings.Value.DatabaseName);
+            _collection = database.GetCollection<T>($"{typeof(T).Name.Replace("Model", "")}s");
         }
 
-        public AppDBContext(DbContextOptions<AppDBContext> options)
-        : base(options)
-        {
-
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<UserModel>()
-                .ToCollection("Users")
-                .Property(e => e.Id) //Added to Create Id when Adding new Users to the Database. Error Solved: Primary Key is Null!
-                .ValueGeneratedOnAdd();
+        public IMongoCollection<T> GetCollection(){
+            return _collection;
         }
     }
 }

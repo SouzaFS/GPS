@@ -3,7 +3,8 @@ using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
 using GPS.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace GPS.Services
 {
