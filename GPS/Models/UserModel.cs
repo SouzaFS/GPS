@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 namespace GPS.Models{
     public class UserModel{
 
-        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))] //Generate Id for Users when Creating
         [GraphQLType(typeof(IdType))]
         [BsonIgnoreIfDefault]
         public string Id {get; set; }

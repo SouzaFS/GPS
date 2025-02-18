@@ -6,16 +6,15 @@ namespace GPS.DBContext{
 
     public class AppDBContext<T> where T : class {
         
-        private readonly IMongoCollection<T> _collection;
+        private readonly IMongoDatabase _database;
 
         public AppDBContext(IOptions<DBSettings> settings){
             var client = new MongoClient(settings.Value.ConnectionString);
-            var database = client.GetDatabase(settings.Value.DatabaseName);
-            _collection = database.GetCollection<T>($"{typeof(T).Name.Replace("Model", "")}s");
+            _database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
         public IMongoCollection<T> GetCollection(){
-            return _collection;
+            return _database.GetCollection<T>($"{typeof(T).Name.Replace("Model", "")}s");
         }
     }
 }
