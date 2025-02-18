@@ -1,12 +1,11 @@
-using GPS.DBContext;
-using GPS.GraphQL.Queries;
+using GPS.GraphQL.Interfaces;
+using GPS.GraphQL;
 using GPS.Models;
 using GPS.Repositories;
 using GPS.Repositories.Interfaces;
 using GPS.Services;
 using GPS.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
+using GPS.DBContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,23 +16,27 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDBContext>(options =>
-{
-    var configuration = builder.Configuration;
-    string connectionString = configuration["ConnectionStrings:MongoDB"];
-    var mongoClient = new MongoClient(connectionString);
-    options.UseMongoDB(mongoClient, "gps_database");
-});
+//MongoDB Configuration for GraphQL and REST API
+builder.Services.Configure<DBSettings>(
+    builder.Configuration.GetSection("Database"));
 
 //REST API Scoped's
+builder.Services.AddScoped<AppDBContext<UserModel>>();
 builder.Services.AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 
 //GraphQL Scoped's
-builder.Services.AddScoped<Users>();
-builder.Services.AddGraphQLServer()
-    .AddQueryType<Users>();
+builder.Services.AddScoped<IUserMutation, UserMutation>();
+builder.Services.AddScoped<IUserQuery, UserQuery>();
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType(d => d.Name("Query"))
+        .AddTypeExtension<UserQuery>()
+    .AddMutationType(d => d.Name("Mutation"))
+        .AddTypeExtension<UserMutation>()
+    .AddSorting()
+    .AddFiltering();
 
 var app = builder.Build();
 

@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[15.0.3, )"
             },
+            "HotChocolate.Data.EntityFramework": {
+              "target": "Package",
+              "version": "[15.0.3, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.12, )"

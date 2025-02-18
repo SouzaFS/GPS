@@ -1,3 +1,6 @@
 {
-    "dotnet.defaultSolution": "GPS.sln"
+    "dotnet.defaultSolution": "GPS.sln",
+    "github.copilot.advanced": {
+        "editor.inlineSuggest.enabled": true
+    }
 }

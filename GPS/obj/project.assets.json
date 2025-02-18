@@ -98,6 +98,23 @@
           }
         }
       },
+      "GreenDonut.Data.EntityFramework/15.0.3": {
+        "type": "package",
+        "dependencies": {
+          "GreenDonut.Data": "15.0.3",
+          "Microsoft.EntityFrameworkCore": "8.0.0"
+        },
+        "compile": {
+          "lib/net8.0/GreenDonut.Data.EntityFramework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/GreenDonut.Data.EntityFramework.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "GreenDonut.Data.Primitives/15.0.3": {
         "type": "package",
         "compile": {
@@ -212,6 +229,55 @@
           "lib/net8.0/HotChocolate.CostAnalysis.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "HotChocolate.Data/15.0.3": {
+        "type": "package",
+        "dependencies": {
+          "GreenDonut.Data": "15.0.3",
+          "GreenDonut.Data.Abstractions": "15.0.3",
+          "GreenDonut.Data.Primitives": "15.0.3",
+          "HotChocolate.Execution": "15.0.3",
+          "HotChocolate.Execution.Projections": "15.0.3",
+          "HotChocolate.Types.CursorPagination": "15.0.3"
+        },
+        "compile": {
+          "lib/net8.0/HotChocolate.Data.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Data.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/_._": {}
+        }
+      },
+      "HotChocolate.Data.EntityFramework/15.0.3": {
+        "type": "package",
+        "dependencies": {
+          "GreenDonut.Data": "15.0.3",
+          "GreenDonut.Data.Abstractions": "15.0.3",
+          "GreenDonut.Data.EntityFramework": "15.0.3",
+          "HotChocolate": "15.0.3",
+          "HotChocolate.Data": "15.0.3",
+          "Microsoft.EntityFrameworkCore": "8.0.0"
+        },
+        "compile": {
+          "lib/net8.0/HotChocolate.Data.EntityFramework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Data.EntityFramework.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/HotChocolate.Data.EntityFramework.props": {},
+          "build/HotChocolate.Data.EntityFramework.targets": {}
         }
       },
       "HotChocolate.Execution/15.0.3": {
@@ -1352,6 +1418,25 @@
         "strawberryshake-signet.png"
       ]
     },
+    "GreenDonut.Data.EntityFramework/15.0.3": {
+      "sha512": "AIhYLjW+TFFckjXmoUOOGt+uR3VKcObGwY7JPG1vyO0U+7WpispmgRnMeDoo7GtweJYrjaq5njXWk9WogDgn4g==",
+      "type": "package",
+      "path": "greendonut.data.entityframework/15.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "greendonut-signet.png",
+        "greendonut.data.entityframework.15.0.3.nupkg.sha512",
+        "greendonut.data.entityframework.nuspec",
+        "hotchocolate-signet.png",
+        "lib/net8.0/GreenDonut.Data.EntityFramework.dll",
+        "lib/net8.0/GreenDonut.Data.EntityFramework.xml",
+        "lib/net9.0/GreenDonut.Data.EntityFramework.dll",
+        "lib/net9.0/GreenDonut.Data.EntityFramework.xml",
+        "strawberryshake-signet.png"
+      ]
+    },
     "GreenDonut.Data.Primitives/15.0.3": {
       "sha512": "t27v5GLmBTYT+S0MO5ob9q9dcjWbx7qVIVNwoei4un6uG63cbjtZ3+8k7MfujMpLJ00/J9RacUs2rMYGilmlnA==",
       "type": "package",
@@ -1465,6 +1550,48 @@
         "lib/net8.0/HotChocolate.CostAnalysis.xml",
         "lib/net9.0/HotChocolate.CostAnalysis.dll",
         "lib/net9.0/HotChocolate.CostAnalysis.xml",
+        "strawberryshake-signet.png"
+      ]
+    },
+    "HotChocolate.Data/15.0.3": {
+      "sha512": "kD8jzn0am1DlVR4rIcP+LcydF1yCumnoQnpuIywnvhi7KcLWtbkLXA+uyuSGjMwQlSHrh82fTzpyLKjt6qL1mw==",
+      "type": "package",
+      "path": "hotchocolate.data/15.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/HotChocolate.Data.props",
+        "build/HotChocolate.Data.targets",
+        "greendonut-signet.png",
+        "hotchocolate-signet.png",
+        "hotchocolate.data.15.0.3.nupkg.sha512",
+        "hotchocolate.data.nuspec",
+        "lib/net8.0/HotChocolate.Data.dll",
+        "lib/net8.0/HotChocolate.Data.xml",
+        "lib/net9.0/HotChocolate.Data.dll",
+        "lib/net9.0/HotChocolate.Data.xml",
+        "strawberryshake-signet.png"
+      ]
+    },
+    "HotChocolate.Data.EntityFramework/15.0.3": {
+      "sha512": "8fvXJF2MMmOgIgrJKMFBgJh+2izRvf7zYHQrGldpRCoqiaFcnOk4t4zBIXim3bn5cWaqjEhsOUsNt47rlOGpSw==",
+      "type": "package",
+      "path": "hotchocolate.data.entityframework/15.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/HotChocolate.Data.EntityFramework.props",
+        "build/HotChocolate.Data.EntityFramework.targets",
+        "greendonut-signet.png",
+        "hotchocolate-signet.png",
+        "hotchocolate.data.entityframework.15.0.3.nupkg.sha512",
+        "hotchocolate.data.entityframework.nuspec",
+        "lib/net8.0/HotChocolate.Data.EntityFramework.dll",
+        "lib/net8.0/HotChocolate.Data.EntityFramework.xml",
+        "lib/net9.0/HotChocolate.Data.EntityFramework.dll",
+        "lib/net9.0/HotChocolate.Data.EntityFramework.xml",
         "strawberryshake-signet.png"
       ]
     },
@@ -3183,6 +3310,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "HotChocolate.AspNetCore >= 15.0.3",
+      "HotChocolate.Data.EntityFramework >= 15.0.3",
       "Microsoft.EntityFrameworkCore >= 8.0.12",
       "Microsoft.Extensions.Configuration >= 8.0.0",
       "MongoDB.Bson >= 3.1.0",
@@ -3243,6 +3371,10 @@
         "targetAlias": "net8.0",
         "dependencies": {
           "HotChocolate.AspNetCore": {
+            "target": "Package",
+            "version": "[15.0.3, )"
+          },
+          "HotChocolate.Data.EntityFramework": {
             "target": "Package",
             "version": "[15.0.3, )"
           },
