@@ -22,20 +22,28 @@ builder.Services.Configure<DBSettings>(
 
 //REST API Scoped's
 builder.Services.AddScoped<AppDBContext<UserModel>>();
+builder.Services.AddScoped<AppDBContext<LocationModel>>();
 builder.Services.AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>();
+builder.Services.AddScoped<IBaseRepository<LocationModel>, BaseRepository<LocationModel>>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 
 //GraphQL Scoped's
 builder.Services.AddScoped<IUserMutation, UserMutation>();
 builder.Services.AddScoped<IUserQuery, UserQuery>();
+builder.Services.AddScoped<ILocationMutation, LocationMutation>();
+builder.Services.AddScoped<ILocationQuery, LocationQuery>();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
         .AddTypeExtension<UserQuery>()
+        .AddTypeExtension<LocationQuery>()
     .AddMutationType(d => d.Name("Mutation"))
         .AddTypeExtension<UserMutation>()
+        .AddTypeExtension<LocationMutation>()
     .AddSorting()
+    .AddProjections()
     .AddFiltering();
 
 var app = builder.Build();

@@ -14,6 +14,9 @@ namespace GPS.GraphQL{
         public UserQuery(IBaseRepository<UserModel> baseRepository){
             _baseRepository = baseRepository;
         }
+        
+        [UseFiltering]
+        [UseProjection]
         public async Task<List<UserModel>> GetUsers(){
             try{
                 return await _baseRepository.GetAll().ToListAsync();
@@ -24,6 +27,8 @@ namespace GPS.GraphQL{
             }
         }
 
+        [UseFiltering]
+        [UseProjection]
         public async Task<UserModel> GetUserById(string id){
             
             try{

@@ -85,7 +85,7 @@ public class UsersController : ControllerBase
                 });
             }
 
-            return NotFound();
+            return UnprocessableEntity();
         }
         catch (Exception e){
             return Problem(e.Message, null, 500);

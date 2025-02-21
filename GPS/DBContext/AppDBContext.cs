@@ -1,4 +1,3 @@
-using GPS.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
