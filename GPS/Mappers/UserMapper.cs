@@ -13,7 +13,7 @@ namespace GPS.Mappers
                 LastName = userModel.LastName,
                 Username = userModel.Username,
                 Email = userModel.Email,
-                FederalID = userModel.FederalID
+                FederalID = userModel.FederalID,
             };
         }
 
@@ -25,7 +25,7 @@ namespace GPS.Mappers
                 LastName = userDTO.LastName,
                 Username = userDTO.Username,
                 Email = userDTO.Email,
-                FederalID = userDTO.FederalID
+                FederalID = userDTO.FederalID,
             };
         }
 

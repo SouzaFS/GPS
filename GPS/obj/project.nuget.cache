@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hrjk/EsNxiE=",
+  "dgSpecHash": "W7cerRur1no=",
   "success": true,
   "projectFilePath": "F:\\Documentos\\Projetos\\Development\\Github\\GPS\\GPS\\GPS.csproj",
   "expectedPackageFiles": [
@@ -66,6 +66,7 @@
     "C:\\Users\\devfe\\.nuget\\packages\\mongodb.driver\\3.1.0\\mongodb.driver.3.1.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\mongodb.entityframeworkcore\\8.2.1\\mongodb.entityframeworkcore.8.2.1.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\devfe\\.nuget\\packages\\rabbitmq.client\\7.0.0\\rabbitmq.client.7.0.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\sharpcompress\\0.30.1\\sharpcompress.0.30.1.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\snappier\\1.0.0\\snappier.1.0.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
@@ -79,6 +80,7 @@
     "C:\\Users\\devfe\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\5.0.0\\system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\system.security.accesscontrol\\5.0.0\\system.security.accesscontrol.5.0.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
+    "C:\\Users\\devfe\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\yarp.reverseproxy\\2.2.0\\yarp.reverseproxy.2.2.0.nupkg.sha512",
     "C:\\Users\\devfe\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
   ],

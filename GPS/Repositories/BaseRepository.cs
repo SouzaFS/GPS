@@ -1,8 +1,6 @@
 using System.Linq.Expressions;
 using GPS.DBContext;
-using GPS.Models;
 using GPS.Repositories.Interfaces;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -40,7 +38,8 @@ namespace GPS.Repositories{
 
         public IQueryable<T> GetAll()
         {
-            return collection.AsQueryable();
+            var result = collection.AsQueryable();
+            return result;
         }
 
         public IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate)

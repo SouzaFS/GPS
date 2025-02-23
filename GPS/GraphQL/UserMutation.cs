@@ -6,7 +6,7 @@ using GPS.Repositories.Interfaces;
 
 namespace GPS.GraphQL{
 
-    [MutationType]
+    [ObjectType("Mutation")]
     public class UserMutation : IUserMutation{
 
         private readonly IBaseRepository<UserModel> _baseRepository;
