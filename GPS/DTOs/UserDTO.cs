@@ -1,4 +1,3 @@
-using GPS.Models;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace GPS.DTOs{
@@ -18,9 +17,5 @@ namespace GPS.DTOs{
 
         [BsonElement("FederalID")]
         public required string FederalID {get; set; }
-
-        [BsonElement("LocationId")]
-        public string LocationId { get; set; } = null;
-
     }
 }

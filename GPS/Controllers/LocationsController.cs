@@ -33,10 +33,10 @@ namespace GPS.Controllers{
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllLocations()
+        public async Task<IActionResult> GetLocations()
         {
             try{
-                var locations = await _locationService.GetAllLocations();
+                var locations = await _locationService.GetLocations();
                 if (locations.Count > 0)
                 {
                     return Ok(new
@@ -54,11 +54,11 @@ namespace GPS.Controllers{
         }
 
         [HttpGet]
-        [Route("userId")]
-        public async Task<IActionResult> GetLocationByUserId(string userId)
+        [Route("id")]
+        public async Task<IActionResult> GetLocationById(string id)
         {
             try{
-                var location = await _locationService.GetLocationByUserId(userId);
+                var location = await _locationService.GetLocationById(id);
                 if (location != null)
                 {
                     return Ok(new
@@ -77,10 +77,10 @@ namespace GPS.Controllers{
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateLocation(string userId, LocationDTO locationDTO)
+        public async Task<IActionResult> UpdateLocation(string id, LocationDTO locationDTO)
         {
             try{
-                var location = await _locationService.UpdateLocation(userId, locationDTO);
+                var location = await _locationService.UpdateLocation(id, locationDTO);
                 if (location != null)
                 {
                     return Ok(new
@@ -89,6 +89,7 @@ namespace GPS.Controllers{
                         result = location
                     });
                 }
+
                 return UnprocessableEntity();
             }
             catch (Exception e){
@@ -98,10 +99,10 @@ namespace GPS.Controllers{
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLocation(string userId)
+        public async Task<IActionResult> DeleteLocation(string id)
         {
             try{
-                var location = await _locationService.DeleteLocation(userId);
+                var location = await _locationService.DeleteLocation(id);
                 if (location != false)
                 {
                     return NoContent();

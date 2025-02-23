@@ -30,7 +30,8 @@ namespace GPS.Services
 
         public async Task<List<UserModel>> GetUsers()
         {
-            return await _baseRepository.GetAll().ToListAsync();
+            var users = await _baseRepository.GetAll().ToListAsync();
+            return users;
         }
 
         public async Task<UserModel> GetUserById(string id)

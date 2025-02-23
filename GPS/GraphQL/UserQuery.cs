@@ -1,12 +1,11 @@
 using GPS.GraphQL.Interfaces;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
-//using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver.Linq;
 
 namespace GPS.GraphQL{
 
-    [QueryType]
+    [ObjectType("Query")]
     public class UserQuery : IUserQuery{
 
         private readonly IBaseRepository<UserModel> _baseRepository;
@@ -15,8 +14,6 @@ namespace GPS.GraphQL{
             _baseRepository = baseRepository;
         }
         
-        [UseFiltering]
-        [UseProjection]
         public async Task<List<UserModel>> GetUsers(){
             try{
                 return await _baseRepository.GetAll().ToListAsync();
@@ -27,8 +24,6 @@ namespace GPS.GraphQL{
             }
         }
 
-        [UseFiltering]
-        [UseProjection]
         public async Task<UserModel> GetUserById(string id){
             
             try{

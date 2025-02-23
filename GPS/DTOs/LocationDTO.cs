@@ -9,8 +9,5 @@ namespace GPS.DTOs{
 
         [BsonElement("Longitude")]
         public double Longitude { get; set; }
-
-        [BsonElement("UserId")]
-        public string UserId { get; set; }
     }
 }

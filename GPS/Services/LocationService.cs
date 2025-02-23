@@ -3,7 +3,8 @@ using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
 using GPS.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace GPS.Services{
 
@@ -25,9 +26,9 @@ namespace GPS.Services{
             return null;
         }
 
-        public async Task<bool> DeleteLocation(string userId){
+        public async Task<bool> DeleteLocation(string id){
             
-            var locationModel = await GetLocationByUserId(userId);
+            var locationModel = await GetLocationById(id);
             if (locationModel != null){
                 await _baseRepository.DeleteAsync(locationModel);
                 return true;
@@ -36,12 +37,12 @@ namespace GPS.Services{
             return false;
         }
 
-        public async Task<List<LocationModel>> GetAllLocations(){
+        public async Task<List<LocationModel>> GetLocations(){
             return await _baseRepository.GetAll().ToListAsync();
         }
 
-        public async Task<LocationModel> GetLocationByUserId(string userId){
-            var locationModel = await _baseRepository.GetByWhere(a => a.UserId == userId).FirstOrDefaultAsync();
+        public async Task<LocationModel> GetLocationById(string id){
+            var locationModel = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
 
             if (locationModel != null){
                 return locationModel;
@@ -50,11 +51,7 @@ namespace GPS.Services{
             return null;
         }
 
-        public async Task<LocationModel> UpdateLocation(string userId, LocationDTO locationDTO){
-            
-            var locModel = await GetLocationByUserId(userId);
-            var id = locModel.Id;
-            
+        public async Task<LocationModel> UpdateLocation(string id, LocationDTO locationDTO){
             var locationModel = LocationMapper.FromDTOToModel(locationDTO);
             locationModel.Id = id;
 

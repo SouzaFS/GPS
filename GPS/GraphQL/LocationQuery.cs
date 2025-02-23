@@ -5,7 +5,7 @@ using MongoDB.Driver.Linq;
 
 namespace GPS.GraphQL{
 
-    [QueryType]
+    [ObjectType("Query")]
     public class LocationQuery : ILocationQuery{
 
         private readonly IBaseRepository<LocationModel> _baseRepository;
@@ -14,9 +14,7 @@ namespace GPS.GraphQL{
             _baseRepository = baseRepository;
         }
         
-        [UseFiltering]
-        [UseProjection]
-        public async Task<List<LocationModel>> GetAllLocations(){
+        public async Task<List<LocationModel>> GetLocations(){
             try{
                 var locations = await _baseRepository.GetAll().ToListAsync();
                 if (locations.Count > 0)
@@ -32,18 +30,16 @@ namespace GPS.GraphQL{
             }
         }
 
-        [UseFiltering]
-        [UseProjection]
-        public async Task<LocationModel> GetLocationByUserId(string userId){
+        public async Task<LocationModel> GetLocationById(string id){
             
             try{
-                var location = await _baseRepository.GetByWhere(a => a.UserId == userId).FirstOrDefaultAsync();
+                var location = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
                 if (location != null)
                 {
                     return location;
                 }
 
-                throw new Exception($"Location associated to userId {userId} not found.");
+                throw new Exception($"Location {id} not found.");
             }
             catch(Exception e){
                 Console.WriteLine($"Error: {e.Message}");

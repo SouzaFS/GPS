@@ -6,7 +6,7 @@ using GPS.Repositories.Interfaces;
 
 namespace GPS.GraphQL{
 
-    [MutationType]
+    [ObjectType("Mutation")]
     public class LocationMutation : ILocationMutation{
         private readonly IBaseRepository<LocationModel> _baseRepository;
 
@@ -33,11 +33,8 @@ namespace GPS.GraphQL{
 
         }
 
-        public async Task<LocationModel> UpdateLocation(string userId, LocationDTO locationDTO){
+        public async Task<LocationModel> UpdateLocation(string id, LocationDTO locationDTO){
             try{
-                var locationModel = await _locationQuery.GetLocationByUserId(userId);
-                var id = locationModel.Id;
-
                 var location = LocationMapper.FromDTOToModel(locationDTO);
                 location.Id = id;
 
@@ -50,9 +47,9 @@ namespace GPS.GraphQL{
             
         }
 
-        public async Task<bool> DeleteLocation(string userId){
+        public async Task<bool> DeleteLocation(string id){
             try{
-                var location = await _locationQuery.GetLocationByUserId(userId);
+                var location = await _locationQuery.GetLocationById(id);
                 if (location != null){
                     await _baseRepository.DeleteAsync(location);
                     return true;
