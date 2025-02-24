@@ -5,7 +5,7 @@ using MongoDB.Driver.Linq;
 
 namespace GPS.GraphQL{
 
-    [ObjectType("Query")]
+    [ExtendObjectType("Query")]
     public class LocationQuery : ILocationQuery{
 
         private readonly IBaseRepository<LocationModel> _baseRepository;
@@ -29,7 +29,6 @@ namespace GPS.GraphQL{
                 throw new Exception("Error getting locations");
             }
         }
-
         public async Task<LocationModel> GetLocationById(string id){
             
             try{

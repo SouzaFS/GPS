@@ -1,5 +1,5 @@
+
 using GPS.Models;
-using GPS.Repositories.Interfaces;
 
 namespace GPS.GraphQL.Interfaces{
 

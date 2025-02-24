@@ -5,18 +5,30 @@ using MongoDB.Driver.Linq;
 
 namespace GPS.GraphQL{
 
-    [ObjectType("Query")]
+    [ExtendObjectType("Query")]
     public class UserQuery : IUserQuery{
 
         private readonly IBaseRepository<UserModel> _baseRepository;
 
-        public UserQuery(IBaseRepository<UserModel> baseRepository){
+        private readonly ILocationQuery _locationQuery;
+
+        public UserQuery(IBaseRepository<UserModel> baseRepository, ILocationQuery locationQuery){
+            _locationQuery = locationQuery;
             _baseRepository = baseRepository;
         }
         
         public async Task<List<UserModel>> GetUsers(){
             try{
-                return await _baseRepository.GetAll().ToListAsync();
+                var users = await _baseRepository.GetAll().ToListAsync();
+                if (users.Count > 0)
+                {
+                    foreach (var user in users){
+                        user.Location = await _locationQuery.GetLocationById(user.LocationId);
+                    }
+                    return users;
+                }
+
+                throw new Exception("No users found.");
             }
             catch(Exception e){
                 Console.WriteLine($"Error: {e.Message}");
@@ -30,6 +42,7 @@ namespace GPS.GraphQL{
                 var user = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
                 if (user != null)
                 {
+                    user.Location = await _locationQuery.GetLocationById(user.LocationId);
                     return user;
                 }
 

@@ -19,5 +19,12 @@ namespace GPS.Models{
 
         [BsonElement("FederalID")]
         public required string FederalID { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        [GraphQLType(typeof(IdType))]
+        public required string LocationId { get; set; }
+
+        public virtual LocationModel? Location { get; set; }
+
     }
 }

@@ -6,10 +6,9 @@ using GPS.Repositories.Interfaces;
 
 namespace GPS.GraphQL{
 
-    [ObjectType("Mutation")]
+    [ExtendObjectType("Mutation")]
     public class LocationMutation : ILocationMutation{
         private readonly IBaseRepository<LocationModel> _baseRepository;
-
         private readonly ILocationQuery _locationQuery;
 
         public LocationMutation(IBaseRepository<LocationModel> locationRepository, ILocationQuery locationQuery){

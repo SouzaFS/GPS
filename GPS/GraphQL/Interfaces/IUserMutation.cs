@@ -1,6 +1,6 @@
 using GPS.DTOs;
 using GPS.Models;
-using GPS.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GPS.GraphQL.Interfaces{
 

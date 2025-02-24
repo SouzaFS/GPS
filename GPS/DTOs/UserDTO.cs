@@ -1,3 +1,5 @@
+using GPS.Models;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace GPS.DTOs{
@@ -17,5 +19,11 @@ namespace GPS.DTOs{
 
         [BsonElement("FederalID")]
         public required string FederalID {get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        [GraphQLType(typeof(IdType))]
+        public required string LocationId { get; set; }
+
+        public virtual LocationDTO? Location { get; set; }
     }
 }
