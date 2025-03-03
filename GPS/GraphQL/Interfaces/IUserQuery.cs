@@ -1,6 +1,3 @@
-using GPS.GraphQL.Unions;
-using GPS.Models;
-
 namespace GPS.GraphQL.Interfaces{
 
     public interface IUserQuery{

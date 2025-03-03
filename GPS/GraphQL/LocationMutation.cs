@@ -1,6 +1,5 @@
 using GPS.DTOs;
 using GPS.GraphQL.Interfaces;
-using GPS.GraphQL.Unions;
 using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
@@ -20,34 +19,41 @@ namespace GPS.GraphQL{
         public async Task<IGraphQLResult> CreateLocation(LocationDTO locationDTO){
             try{
                 var location = LocationMapper.FromDTOToModel(locationDTO);
-                if (location != null){
-                    var result = await _baseRepository.CreateAsync(location);
-                    return new LocationResult(result);
+                var result = await _baseRepository.CreateAsync(location);
+                if (result != null){
+                    return GraphQLModel<LocationModel>.Ok(location);
                 }
 
-                return new Result("Location could not be created", "400");
+                return GraphQLModel<LocationModel>.BadRequest();
             }
             catch (Exception e){
-                return new Result(e.Message, "500");
+                return GraphQLModel<LocationModel>.Problem(e.Message);
             }
 
         }
 
         public async Task<IGraphQLResult> UpdateLocation(string id, LocationDTO locationDTO){
             try{
-                var userId = ((LocationResult)await _locationQuery.GetLocationById(id)).Location.UserId;
+                var locationResult = (GraphQLModel<UserModel>)await _locationQuery.GetLocationById(id);
+                if (locationResult?.Data?.Id == null)
+                {
+                    return GraphQLModel<LocationModel>.BadRequest();
+                }
+                var userId = locationResult.Data.Id;
+
                 var location = LocationMapper.FromDTOToModel(locationDTO);
                 location.Id = id;
                 location.UserId = userId;
+
                 if(userId != null){
                     var result = await _baseRepository.UpdateAsync(location);
-                    return new LocationResult(result);
+                    return GraphQLModel<LocationModel>.Ok(location);
                 }
 
-                return new Result("Location could not be Updated", "400");
+                return GraphQLModel<LocationModel>.BadRequest();
             }
             catch (Exception e){
-                return new Result(e.Message, "500");
+                return GraphQLModel<LocationModel>.Problem(e.Message);
             }
             
         }
@@ -56,14 +62,19 @@ namespace GPS.GraphQL{
             try{
                 var location = await _locationQuery.GetLocationById(id);
                 if (location != null){
-                    await _baseRepository.DeleteAsync(((LocationResult)location).Location);
-                    return new Result("No Content", "204");
+                    var locationModel = ((GraphQLModel<LocationModel>)location).Data;
+                    if (locationModel != null)
+                    {
+                        await _baseRepository.DeleteAsync(locationModel);
+                        return GraphQLModel<LocationModel>.NoContent();
+                    }
+                    
                 }
                 
-                return new Result("Location Could not be Deleted", "422");
+                return GraphQLModel<LocationModel>.UnprocessableEntity();
             }
             catch (Exception e){
-                return new Result(e.Message, "500");
+                return GraphQLModel<LocationModel>.Problem(e.Message);
             }
         }
     }

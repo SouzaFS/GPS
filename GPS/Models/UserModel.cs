@@ -1,4 +1,3 @@
-using GPS.GraphQL.Unions;
 using GPS.Models.Base;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;

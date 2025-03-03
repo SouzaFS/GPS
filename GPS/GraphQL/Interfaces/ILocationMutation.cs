@@ -1,5 +1,4 @@
 using GPS.DTOs;
-using GPS.GraphQL.Unions;
 
 namespace GPS.GraphQL.Interfaces{
     public interface ILocationMutation{

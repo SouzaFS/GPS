@@ -1,5 +1,4 @@
 using GPS.DTOs;
-using GPS.GraphQL.Unions;
 using GPS.Models;
 
 namespace GPS.Mappers

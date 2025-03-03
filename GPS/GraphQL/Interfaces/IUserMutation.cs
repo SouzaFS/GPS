@@ -1,7 +1,4 @@
 using GPS.DTOs;
-using GPS.GraphQL.Unions;
-using GPS.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GPS.GraphQL.Interfaces{
 
