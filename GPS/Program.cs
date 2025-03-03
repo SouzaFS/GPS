@@ -6,7 +6,6 @@ using GPS.Repositories.Interfaces;
 using GPS.Services;
 using GPS.Services.Interfaces;
 using GPS.DBContext;
-using GPS.GraphQL.Unions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,11 +68,10 @@ builder.Services
     .AddMutationType(a => a.Name("Mutation"))
         .AddType<UserMutation>()
         .AddType<LocationMutation>()
-    .AddType<UserListResult>()
-    .AddType<UserResult>()
-    .AddType<Result>()
-    .AddType<LocationListResult>()
-    .AddType<LocationResult>();
+    .AddType<GraphQLModel<List<UserModel>>>()
+    .AddType<GraphQLModel<List<LocationModel>>>()
+    .AddType<GraphQLModel<UserModel>>()
+    .AddType<GraphQLModel<LocationModel>>();
 
 var app = builder.Build();
 

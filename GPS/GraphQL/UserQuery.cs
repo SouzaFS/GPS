@@ -1,8 +1,6 @@
 using GPS.GraphQL.Interfaces;
-using GPS.GraphQL.Unions;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
-using HotChocolate.Execution;
 using MongoDB.Driver.Linq;
 
 namespace GPS.GraphQL{
@@ -17,7 +15,7 @@ namespace GPS.GraphQL{
             _locationQuery = locationQuery;
             _baseRepository = baseRepository;
         }
-        
+
         public async Task<IGraphQLResult> GetUsers(){
             
             try{
@@ -25,16 +23,16 @@ namespace GPS.GraphQL{
                 if(users.Count > 0){
                     foreach (var user in users){
                         var location = await _locationQuery.GetLocationByUserId(user.Id);
-                        user.Location = ((LocationResult)location).Location;
+                        user.Location = ((GraphQLModel<LocationModel>)location).Data;
                     }
 
-                    return new UserListResult(users);
+                    return GraphQLModel<List<UserModel>>.Ok(users);
                 }
 
-                return new Result("Users not Found", "404");
+                return GraphQLModel<List<UserModel>>.NotFound();
             }
             catch (Exception e){
-                return new Result(e.Message, "500");
+                return GraphQLModel<List<UserModel>>.Problem(e.Message);
             }
             
         }
@@ -46,16 +44,18 @@ namespace GPS.GraphQL{
                 if (user != null)
                 {
                     var location = await _locationQuery.GetLocationByUserId(user.Id);
-                    user.Location = ((LocationResult)location).Location;
-                    return new UserResult(user);
+                    user.Location = ((GraphQLModel<LocationModel>)location).Data;
+                    
+                    return GraphQLModel<UserModel>.Ok(user);
                 }
 
-                return new Result("User not Found", "404");
+                return GraphQLModel<UserModel>.NotFound();
             }
             catch(Exception e){
-                return new Result(e.Message, "500");
+                return GraphQLModel<UserModel>.Problem(e.Message);
             }
         }
+        
 
     }
 }
