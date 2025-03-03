@@ -9,6 +9,7 @@ namespace GPS.Mappers{
             return new LocationModel{
                 Latitude = locationDTO.Latitude,
                 Longitude = locationDTO.Longitude,
+                UserId = locationDTO.UserId
             };
         }
 
@@ -17,6 +18,7 @@ namespace GPS.Mappers{
             return new LocationDTO{
                 Latitude = locationModel.Latitude,
                 Longitude = locationModel.Longitude,
+                UserId = locationModel.UserId
             };
         }
     }

@@ -1,10 +1,10 @@
 using GPS.DTOs;
-using GPS.Models;
+using GPS.GraphQL.Unions;
 
 namespace GPS.GraphQL.Interfaces{
     public interface ILocationMutation{
-        public Task<LocationModel> CreateLocation(LocationDTO locationDTO);
-        public Task<LocationModel> UpdateLocation(string id, LocationDTO locationDTO);
-        public Task<bool> DeleteLocation(string id);
+        public Task<IGraphQLResult> CreateLocation(LocationDTO locationDTO);
+        public Task<IGraphQLResult> UpdateLocation(string id, LocationDTO locationDTO);
+        public Task<IGraphQLResult> DeleteLocation(string id);
     }
 }

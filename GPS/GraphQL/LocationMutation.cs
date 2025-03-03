@@ -1,15 +1,15 @@
 using GPS.DTOs;
 using GPS.GraphQL.Interfaces;
+using GPS.GraphQL.Unions;
 using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
 
 namespace GPS.GraphQL{
 
-    [ObjectType("Mutation")]
+    [ExtendObjectType("Mutation")]
     public class LocationMutation : ILocationMutation{
         private readonly IBaseRepository<LocationModel> _baseRepository;
-
         private readonly ILocationQuery _locationQuery;
 
         public LocationMutation(IBaseRepository<LocationModel> locationRepository, ILocationQuery locationQuery){
@@ -17,49 +17,53 @@ namespace GPS.GraphQL{
             _locationQuery = locationQuery;
         }
 
-        public async Task<LocationModel> CreateLocation(LocationDTO locationDTO){
+        public async Task<IGraphQLResult> CreateLocation(LocationDTO locationDTO){
             try{
                 var location = LocationMapper.FromDTOToModel(locationDTO);
                 if (location != null){
-                    return await _baseRepository.CreateAsync(location);
+                    var result = await _baseRepository.CreateAsync(location);
+                    return new LocationResult(result);
                 }
 
-                throw new Exception("Location could not be created");
+                return new Result("Location could not be created", "400");
             }
             catch (Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error creating location");
+                return new Result(e.Message, "500");
             }
 
         }
 
-        public async Task<LocationModel> UpdateLocation(string id, LocationDTO locationDTO){
+        public async Task<IGraphQLResult> UpdateLocation(string id, LocationDTO locationDTO){
             try{
+                var userId = ((LocationResult)await _locationQuery.GetLocationById(id)).Location.UserId;
                 var location = LocationMapper.FromDTOToModel(locationDTO);
                 location.Id = id;
+                location.UserId = userId;
+                if(userId != null){
+                    var result = await _baseRepository.UpdateAsync(location);
+                    return new LocationResult(result);
+                }
 
-                return await _baseRepository.UpdateAsync(location);
+                return new Result("Location could not be Updated", "400");
             }
             catch (Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error updating location");
+                return new Result(e.Message, "500");
             }
             
         }
 
-        public async Task<bool> DeleteLocation(string id){
+        public async Task<IGraphQLResult> DeleteLocation(string id){
             try{
                 var location = await _locationQuery.GetLocationById(id);
                 if (location != null){
-                    await _baseRepository.DeleteAsync(location);
-                    return true;
+                    await _baseRepository.DeleteAsync(((LocationResult)location).Location);
+                    return new Result("No Content", "204");
                 }
                 
-                return false;
+                return new Result("Location Could not be Deleted", "422");
             }
             catch (Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error deleting location");
+                return new Result(e.Message, "500");
             }
         }
     }
