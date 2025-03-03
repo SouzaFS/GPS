@@ -1,4 +1,5 @@
 using GPS.DTOs;
+using GPS.GraphQL.Unions;
 using GPS.Models;
 
 namespace GPS.Mappers
@@ -14,7 +15,6 @@ namespace GPS.Mappers
                 Username = userModel.Username,
                 Email = userModel.Email,
                 FederalID = userModel.FederalID,
-                LocationId = userModel.LocationId
             };
         }
 
@@ -26,8 +26,7 @@ namespace GPS.Mappers
                 LastName = userDTO.LastName,
                 Username = userDTO.Username,
                 Email = userDTO.Email,
-                FederalID = userDTO.FederalID,
-                LocationId = userDTO.LocationId
+                FederalID = userDTO.FederalID
             };
         }
 

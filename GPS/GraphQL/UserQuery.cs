@@ -1,6 +1,8 @@
 using GPS.GraphQL.Interfaces;
+using GPS.GraphQL.Unions;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
+using HotChocolate.Execution;
 using MongoDB.Driver.Linq;
 
 namespace GPS.GraphQL{
@@ -9,7 +11,6 @@ namespace GPS.GraphQL{
     public class UserQuery : IUserQuery{
 
         private readonly IBaseRepository<UserModel> _baseRepository;
-
         private readonly ILocationQuery _locationQuery;
 
         public UserQuery(IBaseRepository<UserModel> baseRepository, ILocationQuery locationQuery){
@@ -17,40 +18,42 @@ namespace GPS.GraphQL{
             _baseRepository = baseRepository;
         }
         
-        public async Task<List<UserModel>> GetUsers(){
+        public async Task<IGraphQLResult> GetUsers(){
+            
             try{
                 var users = await _baseRepository.GetAll().ToListAsync();
-                if (users.Count > 0)
-                {
+                if(users.Count > 0){
                     foreach (var user in users){
-                        user.Location = await _locationQuery.GetLocationById(user.LocationId);
+                        var location = await _locationQuery.GetLocationByUserId(user.Id);
+                        user.Location = ((LocationResult)location).Location;
                     }
-                    return users;
+
+                    return new UserListResult(users);
                 }
 
-                throw new Exception("No users found.");
+                return new Result("Users not Found", "404");
             }
-            catch(Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error getting users");
+            catch (Exception e){
+                return new Result(e.Message, "500");
             }
+            
         }
 
-        public async Task<UserModel> GetUserById(string id){
+        public async Task<IGraphQLResult> GetUserById(string id){
             
             try{
                 var user = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
                 if (user != null)
                 {
-                    user.Location = await _locationQuery.GetLocationById(user.LocationId);
-                    return user;
+                    var location = await _locationQuery.GetLocationByUserId(user.Id);
+                    user.Location = ((LocationResult)location).Location;
+                    return new UserResult(user);
                 }
 
-                throw new Exception($"User with id {id} not found.");
+                return new Result("User not Found", "404");
             }
             catch(Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error getting user");
+                return new Result(e.Message, "500");
             }
         }
 

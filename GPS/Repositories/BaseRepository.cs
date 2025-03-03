@@ -50,9 +50,8 @@ namespace GPS.Repositories{
         public async Task<T> UpdateAsync(T entity)
         {
             var idProperty = entity.GetType().GetProperty("Id");
-            if (idProperty == null)
-            {
-                throw new InvalidOperationException("The entity does not have an 'Id' property.");
+            if(idProperty == null){
+                return null;
             }
             var idValue = idProperty.GetValue(entity);
             

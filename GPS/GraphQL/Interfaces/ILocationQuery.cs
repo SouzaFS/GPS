@@ -1,9 +1,10 @@
-using GPS.Models;
+using GPS.GraphQL.Unions;
 
 namespace GPS.GraphQL.Interfaces{
 
     public interface ILocationQuery{
-        Task<List<LocationModel>> GetLocations();
-        Task<LocationModel> GetLocationById(string id);
+        Task<IGraphQLResult> GetLocations();
+        Task<IGraphQLResult> GetLocationById(string id);
+        Task<IGraphQLResult> GetLocationByUserId(string userId);
     }
 }

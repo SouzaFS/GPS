@@ -1,4 +1,5 @@
 using GPS.GraphQL.Interfaces;
+using GPS.GraphQL.Unions;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
 using MongoDB.Driver.Linq;
@@ -14,36 +15,49 @@ namespace GPS.GraphQL{
             _baseRepository = baseRepository;
         }
         
-        public async Task<List<LocationModel>> GetLocations(){
+        public async Task<IGraphQLResult> GetLocations(){
             try{
                 var locations = await _baseRepository.GetAll().ToListAsync();
                 if (locations.Count > 0)
                 {
-                    return locations;
+                    return new LocationListResult(locations);
                 }
 
-                throw new Exception("No locations found.");
+                return new Result("Locations not Found", "404");
             }
             catch(Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error getting locations");
+                return new Result(e.Message, "500");
             }
         }
-        public async Task<LocationModel> GetLocationById(string id){
+        public async Task<IGraphQLResult> GetLocationById(string id){
             
             try{
                 var location = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
                 if (location != null)
                 {
-                    return location;
+                    return new LocationResult(location);
                 }
 
-                throw new Exception($"Location {id} not found.");
+                return new Result("Location not Found", "404");
             }
             catch(Exception e){
-                Console.WriteLine($"Error: {e.Message}");
-                throw new Exception("Error getting location");
+                return new Result(e.Message, "500");
             }
-        }   
+        }
+
+        public async Task<IGraphQLResult> GetLocationByUserId(string userId){
+            try{
+                var location = await _baseRepository.GetByWhere(a => a.UserId == userId).FirstOrDefaultAsync();
+                if (location != null)
+                {
+                    return new LocationResult(location);
+                }
+
+                return new Result($"User Location not Found", "404");
+            }
+            catch(Exception e){
+                return new Result(e.Message, "500");
+            }
+        }
     }
 }
