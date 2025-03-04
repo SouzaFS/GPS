@@ -6,15 +6,15 @@ namespace GPS.Models{
     public class UserModel : BaseModel{
 
         [BsonElement("FirstName")]
-        public required string FirstName { get; set; }
+        public string? FirstName { get; set; }
         [BsonElement("LastName")]
-        public required string LastName { get; set; }
+        public string? LastName { get; set; }
         [BsonElement("Username")]
-        public required string Username { get; set; }
+        public string? Username { get; set; }
         [BsonElement("Email")]
-        public required string Email { get; set; }
+        public string? Email { get; set; }
         [BsonElement("FederalID")]
-        public required string FederalID { get; set; }
+        public string? FederalID { get; set; }
         [BsonElement("Location")]
         public virtual LocationModel? Location { get; set; }
 

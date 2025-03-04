@@ -2,11 +2,11 @@ using GPS.DTOs;
 using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
-using GPS.Services.Interfaces;
+using GPS.REST.Services.Interfaces;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
-namespace GPS.Services
+namespace GPS.REST.Services
 {
     public class UserService : IUserService{
 
@@ -47,12 +47,12 @@ namespace GPS.Services
 
         public async Task<UserModel> UpdateUser(string id, UserDTO userDTO)
         {
-            var userModel = UserMapper.FromDTOToModel(userDTO);
-            userModel.Id = id;
+            var userModel = await GetUserById(id);
+            var user = UserMapper.FromDTOToExistingModel(userModel, userDTO);
             
-            var result = await _baseRepository.UpdateAsync(userModel);
+            var result = await _baseRepository.UpdateAsync(user);
             if (result != null){
-                return userModel;
+                return result;
             }
 
             return null;

@@ -1,8 +1,7 @@
 using GPS.DTOs;
 using GPS.Models;
 
-namespace GPS.Services.Interfaces
-{
+namespace GPS.REST.Services.Interfaces{
     public interface IUserService
     {
         Task<UserModel> CreateUser(UserDTO userDTO);

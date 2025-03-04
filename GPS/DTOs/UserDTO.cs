@@ -1,4 +1,3 @@
-using GPS.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -6,15 +5,15 @@ namespace GPS.DTOs{
     public class UserDTO{
 
         [BsonElement("FirstName")]
-        public required string FirstName {get; set; }
+        public string? FirstName {get; set; }
         [BsonElement("LastName")]
-        public required string LastName {get; set; }
+        public string? LastName {get; set; }
         [BsonElement("Username")]
-        public required string Username {get; set; }
+        public string? Username {get; set; }
         [BsonElement("Email")]
-        public required string Email {get; set; }
+        public string? Email {get; set; }
         [BsonElement("FederalID")]
-        public required string FederalID {get; set; }
+        public string? FederalID {get; set; }
         public virtual LocationDTO? Location { get; set; }
 
     }

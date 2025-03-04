@@ -1,8 +1,8 @@
 using GPS.DTOs;
-using GPS.Services.Interfaces;
+using GPS.REST.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GPS.Controllers{
+namespace GPS.REST.Controllers{
 
     [ApiController]
     [Route("[controller]")]
