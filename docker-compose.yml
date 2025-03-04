@@ -1,6 +1,7 @@
 services:
   mongo-express:
     image: mongo-express:1.0.2
+    container_name: MongoExpress
     ports:
       - 8081:8081
     environment:
@@ -21,7 +22,7 @@ services:
 
   mongo:
     image: mongo:8.0.4
-    container_name: mongo
+    container_name: MongoDB
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
@@ -36,7 +37,7 @@ services:
       - api-network
 
   api:
-    container_name: gpsapi
+    container_name: GPS
     build:
       context: .
     environment:
@@ -53,6 +54,25 @@ services:
       - mongo
     ports:
       - '5098:8080'
+
+  RabbitMQ:
+    image: rabbitmq:4-management
+    hostname: 'rabbitmq'
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    container_name: RabbitMQ
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - api-network
+
+
 
 networks: 
     api-network:

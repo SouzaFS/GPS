@@ -7,6 +7,8 @@ using GPS.REST.Services;
 using GPS.REST.Services.Interfaces;
 using GPS.DBContext;
 using GPS.GraphQL.Controllers;
+using GPS.RabbitMQ.Services.Interfaces;
+using GPS.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,8 @@ builder.Services.Configure<DBSettings>(
 builder.Services
     .AddScoped<AppDBContext<UserModel>>()
     .AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>()
-    .AddScoped<IUserService, UserService>();
+    .AddScoped<IUserService, UserService>()
+    .AddScoped<IProducer, Producer>();
 
 if(builder.Environment.IsDevelopment()){
     
