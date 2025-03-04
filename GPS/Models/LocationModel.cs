@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace GPS.Models{
 
-    public class LocationModel : BaseModel{
+    public class LocationModel{
 
         [BsonElement("Latitude")]
         public double? Latitude { get; set; }
@@ -12,8 +12,5 @@ namespace GPS.Models{
         [BsonElement("Longitude")]
         public double? Longitude { get; set; }
 
-        [BsonRepresentation(BsonType.ObjectId)]
-        [GraphQLType(typeof(IdType))]
-        public required string UserId { get; set; }
     }
 }

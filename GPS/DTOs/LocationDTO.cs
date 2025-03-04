@@ -10,10 +10,6 @@ namespace GPS.DTOs{
 
         [BsonElement("Longitude")]
         public double? Longitude { get; set; }
-
-        [BsonRepresentation(BsonType.ObjectId)]
-        [GraphQLType(typeof(IdType))]
-        public required string UserId { get; set; }
         
     }
 }

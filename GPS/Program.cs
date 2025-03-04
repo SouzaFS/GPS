@@ -1,11 +1,12 @@
-using GPS.GraphQL.Interfaces;
-using GPS.GraphQL;
+using GPS.GraphQL.Services;
+using GPS.GraphQL.Services.Interfaces;
 using GPS.Models;
 using GPS.Repositories;
 using GPS.Repositories.Interfaces;
-using GPS.Services;
-using GPS.Services.Interfaces;
+using GPS.REST.Services;
+using GPS.REST.Services.Interfaces;
 using GPS.DBContext;
+using GPS.GraphQL.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +24,8 @@ builder.Services.Configure<DBSettings>(
 //REST API Scoped's
 builder.Services
     .AddScoped<AppDBContext<UserModel>>()
-    .AddScoped<AppDBContext<LocationModel>>()
     .AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>()
-    .AddScoped<IBaseRepository<LocationModel>, BaseRepository<LocationModel>>()
-    .AddScoped<IUserService, UserService>()
-    .AddScoped<ILocationService, LocationService>();
+    .AddScoped<IUserService, UserService>();
 
 if(builder.Environment.IsDevelopment()){
     
@@ -56,22 +54,16 @@ if(builder.Environment.IsProduction()){
 //GraphQL Scoped's
 builder.Services
     .AddScoped<IUserMutation, UserMutation>()
-    .AddScoped<IUserQuery, UserQuery>()
-    .AddScoped<ILocationMutation, LocationMutation>()
-    .AddScoped<ILocationQuery, LocationQuery>();
+    .AddScoped<IUserQuery, UserQuery>();
     
 builder.Services
     .AddGraphQLServer()
     .AddQueryType(a => a.Name("Query"))
-        .AddType<UserQuery>()
-        .AddType<LocationQuery>()
+        .AddType<UsersQueryController>()
     .AddMutationType(a => a.Name("Mutation"))
-        .AddType<UserMutation>()
-        .AddType<LocationMutation>()
-    .AddType<GraphQLModel<List<UserModel>>>()
-    .AddType<GraphQLModel<List<LocationModel>>>()
-    .AddType<GraphQLModel<UserModel>>()
-    .AddType<GraphQLModel<LocationModel>>();
+        .AddType<UsersMutationController>()
+    .AddType<GraphQL<List<UserModel>>>()
+    .AddType<GraphQL<UserModel>>();
 
 var app = builder.Build();
 
