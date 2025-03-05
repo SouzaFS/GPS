@@ -15,12 +15,12 @@ namespace GPS.GraphQL.Services{
 
         public async Task<List<UserModel>> GetUsers(){
            
-            return await _baseRepository.GetAll().ToListAsync();
+            return await _baseRepository.GetAll();
         }
 
         public async Task<UserModel> GetUserById(string id){
 
-            var user = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
+            var user = await _baseRepository.GetByWhere(a => a.Id == id);
             if (user != null){
                 return user;
             }

@@ -38,12 +38,13 @@ namespace GPS.REST.Controllers{
         {
             try{
                 var users = await _userService.GetUsers();
-                
-                if (users.Count > 0){
-                    return Ok(new {
-                        success = true,
-                        result = users
-                    });
+                if (users is not null){
+                    if (users.Count > 0){
+                        return Ok(new {
+                            success = true,
+                            result = users
+                        });
+                    }
                 }
 
                 return NotFound();

@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using GPS.DBContext;
 using GPS.Repositories.Interfaces;
 using MongoDB.Driver;
@@ -33,18 +34,21 @@ namespace GPS.Repositories{
             {
                 throw new InvalidOperationException("The 'Id' property value is null.");
             }
+            
             await collection.DeleteOneAsync(Builders<T>.Filter.Eq("Id", idValue));
+            
         }
 
-        public IQueryable<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            var result = collection.AsQueryable();
+            var result = await collection.AsQueryable().ToListAsync();
             return result;
         }
 
-        public IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetByWhere(Expression<Func<T, bool>> predicate)
         {
-            return collection.AsQueryable().Where(predicate);
+            var result = await collection.AsQueryable().Where(predicate).FirstOrDefaultAsync();
+            return result;
         }
 
         public async Task<T> UpdateAsync(T entity)
