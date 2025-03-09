@@ -2,23 +2,20 @@ using System.Linq.Expressions;
 using GPS.Repositories.Interfaces;
 using GPS.REST.Services;
 
-namespace UnitTests.UnitTests.REST{
+namespace UnitTests.UnitTests.Services.REST{
 
-    public class GetUserByIdTest{
+    public class DeleteUserServiceTest{
 
         private readonly Mock<IBaseRepository<UserModel>> _mockedBaseRepository;
         private readonly UserService _userService;
-
-        public GetUserByIdTest(){
+        public DeleteUserServiceTest(){
             _mockedBaseRepository = new Mock<IBaseRepository<UserModel>>();
-            
             _userService = new UserService(_mockedBaseRepository.Object);
         }
 
         [Fact]
-        public async Task GetUserSuccess_ShouldResultOk(){
+        public async Task DeleteUserSuccess_ShouldResultTrue(){
             
-
             //Arrange
             var userModel = new UserModel(){
                 Id = "2d33bc33e6e439f3b5db721f",
@@ -29,34 +26,42 @@ namespace UnitTests.UnitTests.REST{
                 FederalID = "federalID"
             };
 
-
             _mockedBaseRepository
                 .Setup(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()))
                 .ReturnsAsync(userModel);
+                
+            _mockedBaseRepository
+                .Setup(rep => rep.DeleteAsync(It.IsAny<UserModel>()))
+                .Returns(Task.CompletedTask);
 
             //Act
-            var serviceResult = await _userService.GetUserById(userModel.Id);
-            var expectedResult = userModel;
+            var serviceResult = await _userService.DeleteUser(userModel.Id);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);
-            Assert.Equal(expectedResult, serviceResult);
+            _mockedBaseRepository.Verify(rep => rep.DeleteAsync(It.IsAny<UserModel>()), Times.Once);
+            Assert.True(serviceResult);
+            
         }
 
         [Fact]
-        public async Task GetUserFailed_UserNotFound_ShouldResultNull(){
-            
+        public async Task DeleteUserFailed_UserNotFound_ShouldResultFalse(){
+
             //Arrange
+            var userModel = new UserModel(){
+                Id = "2d33bc33e6e439f3b5db721f",
+            };
+
             _mockedBaseRepository
-                .Setup(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel,bool>>>()))
-                .ReturnsAsync((UserModel)null);
+                .Setup(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()))
+                .ReturnsAsync((UserModel)null!);
 
             //Act
-            var serviceResult = await _userService.GetUserById("2d33bc33e6e439f3b5db721f");
-            
+            var serviceResult = await _userService.DeleteUser(userModel.Id);
+
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);
-            Assert.Null(serviceResult);
+            Assert.False(serviceResult);
         }
     }
 }

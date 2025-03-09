@@ -1,14 +1,14 @@
 using GPS.Repositories.Interfaces;
 using GPS.REST.Services;
 
-namespace UnitTests.UnitTests.REST{
+namespace UnitTests.UnitTests.Services.REST{
 
-    public class GetUsersTest{
+    public class GetUsersServiceTest{
 
         private readonly Mock<IBaseRepository<UserModel>> _mockedBaseRepository;
         private readonly UserService _userService;
 
-        public GetUsersTest(){
+        public GetUsersServiceTest(){
             _mockedBaseRepository = new Mock<IBaseRepository<UserModel>>();
             _userService = new UserService(_mockedBaseRepository.Object);
         }
@@ -53,7 +53,7 @@ namespace UnitTests.UnitTests.REST{
         public async Task GetUsersFailed_NullList_ShouldResultNull(){
 
             //Arrange
-            _mockedBaseRepository.Setup(rep => rep.GetAll()).ReturnsAsync((List<UserModel>)null);
+            _mockedBaseRepository.Setup(rep => rep.GetAll()).ReturnsAsync((List<UserModel>)null!);
 
             //Act
             var serviceResult = await _userService.GetUsers();

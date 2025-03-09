@@ -1,22 +1,23 @@
 using System.Linq.Expressions;
 using GPS.Mappers;
 using GPS.Repositories.Interfaces;
-using GPS.REST.Services;
+using GPS.GraphQL.Services;
 
-namespace UnitTests.UnitTests.REST{
+namespace UnitTests.UnitTests.Services.GraphQL{
 
-    public class UpdateUserTest{
+    public class UpdateUserMutationTest{
 
         private readonly Mock<IBaseRepository<UserModel>> _mockedBaseRepository;
-        private readonly UserService _userService;
-
-        public UpdateUserTest(){
+        private readonly UserMutation _userMutation;
+        private readonly UserQuery _userQuery;
+        public UpdateUserMutationTest(){
             _mockedBaseRepository = new Mock<IBaseRepository<UserModel>>();
-            _userService = new UserService(_mockedBaseRepository.Object);
+            _userQuery = new UserQuery(_mockedBaseRepository.Object);
+            _userMutation = new UserMutation(_mockedBaseRepository.Object, _userQuery);
         }
         
         [Fact]
-        public async Task UpdateUserSuccess_ShouldResultUpdated(){
+        public async Task UpdateUserSuccess_ShouldReturnUpdatedUser(){
 
             //Arrange
             var userModel = new UserModel(){
@@ -45,7 +46,7 @@ namespace UnitTests.UnitTests.REST{
                 .ReturnsAsync(expectedResult);
 
             //Act
-            var serviceResult = await _userService.UpdateUser(userModel.Id, userDTO);
+            var serviceResult = await _userMutation.UpdateUser(userModel.Id, userDTO);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);
@@ -66,10 +67,10 @@ namespace UnitTests.UnitTests.REST{
 
             _mockedBaseRepository
                 .Setup(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()))
-                .ReturnsAsync((UserModel)null);
+                .ReturnsAsync((UserModel)null!);
 
             //Act
-            var serviceResult = await _userService.UpdateUser("2d33bc33e6e439f3b5db721f", userDTO);
+            var serviceResult = await _userMutation.UpdateUser("2d33bc33e6e439f3b5db721f", userDTO);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);
@@ -102,10 +103,10 @@ namespace UnitTests.UnitTests.REST{
 
             _mockedBaseRepository
                 .Setup(rep => rep.UpdateAsync(It.IsAny<UserModel>()))
-                .ReturnsAsync((UserModel)null);
+                .ReturnsAsync((UserModel)null!);
 
             //Act
-            var serviceResult = await _userService.UpdateUser(userModel.Id, userDTO);
+            var serviceResult = await _userMutation.UpdateUser(userModel.Id, userDTO);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);
@@ -126,7 +127,7 @@ namespace UnitTests.UnitTests.REST{
             };
 
             //Act
-            var serviceResult = await _userService.UpdateUser(userModel.Id, null);
+            var serviceResult = await _userMutation.UpdateUser(userModel.Id, null!);
 
             //Assert
             Assert.Null(serviceResult);
@@ -163,7 +164,7 @@ namespace UnitTests.UnitTests.REST{
                 .ReturnsAsync(expectedResult);
 
             //Act
-            var serviceResult = await _userService.UpdateUser(userModel.Id, userDTO);
+            var serviceResult = await _userMutation.UpdateUser(userModel.Id, userDTO);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);

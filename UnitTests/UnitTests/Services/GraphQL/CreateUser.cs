@@ -1,22 +1,23 @@
 using GPS.Mappers;
 using GPS.Repositories.Interfaces;
-using GPS.REST.Services;
+using GPS.GraphQL.Services;
 
-namespace UnitTests.UnitTests.REST{
+namespace UnitTests.UnitTests.Services.GraphQL{
 
-    public class CreateUserTest{
+    public class CreateUserMutationTest{
         
         private readonly Mock<IBaseRepository<UserModel>> _mockedBaseRepository;
-        private readonly UserService _userService;
+        private readonly UserMutation _userMutation;
+        private readonly UserQuery _userQuery;
 
-        public CreateUserTest(){
+        public CreateUserMutationTest(){
             _mockedBaseRepository = new Mock<IBaseRepository<UserModel>>();
-            
-            _userService = new UserService(_mockedBaseRepository.Object);
+            _userQuery = new UserQuery(_mockedBaseRepository.Object);
+            _userMutation = new UserMutation(_mockedBaseRepository.Object, _userQuery);
         }
 
         [Fact]
-        public async Task CreateUserSuccess_ShouldResultCreated(){
+        public async Task CreateUserSuccess_ShouldReturnUser(){
             
             //Arrange
             var userModel = new UserModel(){
@@ -29,11 +30,10 @@ namespace UnitTests.UnitTests.REST{
             };
 
             var userDTO = UserMapper.FromModelToDTO(userModel);
-            var mockBaseRepository = new Mock<IBaseRepository<UserModel>>();
             _mockedBaseRepository.Setup(rep => rep.CreateAsync(It.IsAny<UserModel>())).ReturnsAsync(userModel);
             
             //Act
-            var serviceResult = await _userService.CreateUser(userDTO);
+            var serviceResult = await _userMutation.CreateUser(userDTO);
             var expectedResult = userModel;
 
             //Assert
@@ -53,10 +53,10 @@ namespace UnitTests.UnitTests.REST{
                 FederalID = "federalID"
             };
             //Arrange
-            _mockedBaseRepository.Setup(rep => rep.CreateAsync(It.IsAny<UserModel>())).ReturnsAsync((UserModel)null);
+            _mockedBaseRepository.Setup(rep => rep.CreateAsync(It.IsAny<UserModel>())).ReturnsAsync((UserModel)null!);
 
             //Act
-            var serviceResult = await _userService.CreateUser(userDTO);
+            var serviceResult = await _userMutation.CreateUser(userDTO);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.CreateAsync(It.IsAny<UserModel>()), Times.Once);
@@ -67,7 +67,7 @@ namespace UnitTests.UnitTests.REST{
         public async Task CreateUserFailed_NullUserDTO_ShouldResultNull(){
 
             //Act
-            var serviceResult = await _userService.CreateUser(null);
+            var serviceResult = await _userMutation.CreateUser(null!);
 
             //Assert
             Assert.Null(serviceResult);

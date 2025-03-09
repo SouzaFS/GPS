@@ -17,27 +17,34 @@ namespace GPS.GraphQL.Services{
             _baseRepository = baseRepository;
         }
 
-        public async Task<UserModel> CreateUser(UserDTO userDTO){
+        public async Task<UserModel?> CreateUser(UserDTO userDTO){
             
-            var userModel = UserMapper.FromDTOToModel(userDTO);
-            var user = await _baseRepository.CreateAsync(userModel);
-            if (user != null){
-                return user;
+            if (userDTO != null){
+                var userModel = UserMapper.FromDTOToModel(userDTO);
+                var user = await _baseRepository.CreateAsync(userModel);
+                if (user != null){
+                    return user;
+                }
             }
 
             return null;
         }
 
-        public async Task<UserModel> UpdateUser(string id, UserDTO userDTO){
+        public async Task<UserModel?> UpdateUser(string id, UserDTO userDTO){
             
-            var userModel = await _userQuery.GetUserById(id);
-            var user = UserMapper.FromDTOToExistingModel(userModel, userDTO);
-            
-            var result = await _baseRepository.UpdateAsync(user);
-            if (result != null){
-                return user;
+            if (userDTO != null){
+                
+                var userModel = await _userQuery.GetUserById(id);
+                if (userModel != null){
+                    
+                    var user = UserMapper.FromDTOToExistingModel(userModel, userDTO);
+                    var result = await _baseRepository.UpdateAsync(user);
+                    if (result != null){
+                        return result;
+                    }
+                }
             }
-            
+
             return null;
         }
 

@@ -1,16 +1,18 @@
 using System.Linq.Expressions;
 using GPS.Repositories.Interfaces;
-using GPS.REST.Services;
+using GPS.GraphQL.Services;
 
-namespace UnitTests.UnitTests.REST{
+namespace UnitTests.UnitTests.Services.GraphQL{
 
-    public class DeleteUserTest{
+    public class DeleteUserMutationTest{
 
         private readonly Mock<IBaseRepository<UserModel>> _mockedBaseRepository;
-        private readonly UserService _userService;
-        public DeleteUserTest(){
+        private readonly UserMutation _userMutation;
+        private readonly UserQuery _userQuery;
+        public DeleteUserMutationTest(){
             _mockedBaseRepository = new Mock<IBaseRepository<UserModel>>();
-            _userService = new UserService(_mockedBaseRepository.Object);
+            _userQuery = new UserQuery(_mockedBaseRepository.Object);
+            _userMutation = new UserMutation(_mockedBaseRepository.Object, _userQuery);
         }
 
         [Fact]
@@ -35,7 +37,7 @@ namespace UnitTests.UnitTests.REST{
                 .Returns(Task.CompletedTask);
 
             //Act
-            var serviceResult = await _userService.DeleteUser(userModel.Id);
+            var serviceResult = await _userMutation.DeleteUser(userModel.Id);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);
@@ -54,10 +56,10 @@ namespace UnitTests.UnitTests.REST{
 
             _mockedBaseRepository
                 .Setup(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()))
-                .ReturnsAsync((UserModel)null);
+                .ReturnsAsync((UserModel)null!);
 
             //Act
-            var serviceResult = await _userService.DeleteUser(userModel.Id);
+            var serviceResult = await _userMutation.DeleteUser(userModel.Id);
 
             //Assert
             _mockedBaseRepository.Verify(rep => rep.GetByWhere(It.IsAny<Expression<Func<UserModel, bool>>>()), Times.Once);

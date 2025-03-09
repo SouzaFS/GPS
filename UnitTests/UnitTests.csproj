@@ -16,13 +16,11 @@
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <ProjectReference Include="..\GPS\GPS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
-    <Reference Include="GPS">
-      <HintPath>..\GPS\bin\Debug\net8.0\GPS.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

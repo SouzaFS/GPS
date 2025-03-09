@@ -17,9 +17,9 @@ namespace GPS.REST.Services
             _baseRepository = baseRepository;
         }
 
-        public async Task<UserModel> CreateUser(UserDTO userDTO)
+        public async Task<UserModel?> CreateUser(UserDTO userDTO)
         {
-            if (userDTO is not null){
+            if (userDTO != null){
                 var userModel = UserMapper.FromDTOToModel(userDTO);
                 var user = await _baseRepository.CreateAsync(userModel);
                 if (user != null){
@@ -30,17 +30,17 @@ namespace GPS.REST.Services
             return null;
         }
 
-        public async Task<List<UserModel>> GetUsers()
+        public async Task<List<UserModel>?> GetUsers()
         {
             var users = await _baseRepository.GetAll();
-            if (users is not null){
+            if (users != null){
                 return users;
             }
             
             return null;
         }
 
-        public async Task<UserModel> GetUserById(string id)
+        public async Task<UserModel?> GetUserById(string id)
         {
             var userModel = await _baseRepository.GetByWhere(a => a.Id == id);
             if (userModel != null){
@@ -50,7 +50,7 @@ namespace GPS.REST.Services
             return null;
         }
 
-        public async Task<UserModel> UpdateUser(string id, UserDTO userDTO)
+        public async Task<UserModel?> UpdateUser(string id, UserDTO userDTO)
         {
             if (userDTO != null){
                 

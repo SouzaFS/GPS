@@ -58,7 +58,9 @@ namespace GPS.Repositories{
                 return null;
             }
             var idValue = idProperty.GetValue(entity);
-            
+            if(idValue == null){
+                return null;
+            }
             await collection.ReplaceOneAsync(Builders<T>.Filter.Eq("Id", idValue), entity);
             return entity;
         }
