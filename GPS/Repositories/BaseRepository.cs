@@ -1,68 +1,71 @@
+using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using GPS.DBContext;
 using GPS.Repositories.Interfaces;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using ZstdSharp.Unsafe;
 
 namespace GPS.Repositories{
     public class BaseRepository <T> : IBaseRepository <T> where T : class
     {
-        private readonly AppDBContext<T> _dbContext;
+        private readonly IAppDBContext<T> _dbContext;
         private readonly IMongoCollection<T> collection;
-
-        public BaseRepository(AppDBContext<T> dbContext){
+        public BaseRepository(IAppDBContext<T> dbContext){
             _dbContext = dbContext;
             collection = _dbContext.GetCollection();
         }
 
-        public async Task<T> CreateAsync(T entity)
-        {
+        public async Task<T?> CreateAsync(T entity){
+            
             await collection.InsertOneAsync(entity);
-            return entity;
+            return entity; 
         }
 
-        public async Task DeleteAsync(T entity)
-        {
+        public async Task<bool> DeleteAsync(T entity){
+            
             var idProperty = entity.GetType().GetProperty("Id");
-            if (idProperty == null)
-            {
-                throw new InvalidOperationException("The entity does not have an 'Id' property.");
+            if (idProperty != null){
+                var idValue = idProperty.GetValue(entity);
+                await collection.DeleteOneAsync(Builders<T>.Filter.Eq("Id", idValue));
+                return true;
             }
-            var idValue = idProperty.GetValue(entity);
-            if (idValue == null)
-            {
-                throw new InvalidOperationException("The 'Id' property value is null.");
-            }
-            
-            await collection.DeleteOneAsync(Builders<T>.Filter.Eq("Id", idValue));
+
+            return false;
             
         }
 
-        public async Task<List<T>> GetAll()
-        {
+        public async Task<List<T>?> GetAll(){
+            
             var result = await collection.AsQueryable().ToListAsync();
-            return result;
+            if (result != null){
+                return result;
+            }
+
+            return null;
         }
 
-        public async Task<T> GetByWhere(Expression<Func<T, bool>> predicate)
-        {
+        public async Task<T?> GetByWhere(Expression<Func<T, bool>> predicate){
+            
             var result = await collection.AsQueryable().Where(predicate).FirstOrDefaultAsync();
-            return result;
+            if (result != null){
+                return result;
+            }
+
+            return null;
         }
 
-        public async Task<T> UpdateAsync(T entity)
-        {
+        public async Task<T?> UpdateAsync(T entity){
+            
             var idProperty = entity.GetType().GetProperty("Id");
-            if(idProperty == null){
-                return null;
+            if(idProperty != null){
+                var idValue = idProperty.GetValue(entity);
+                await collection.ReplaceOneAsync(Builders<T>.Filter.Eq("Id", idValue), entity);
+                return entity;
             }
-            var idValue = idProperty.GetValue(entity);
-            if(idValue == null){
-                return null;
-            }
-            await collection.ReplaceOneAsync(Builders<T>.Filter.Eq("Id", idValue), entity);
-            return entity;
+
+            return null;
         }
 
     }

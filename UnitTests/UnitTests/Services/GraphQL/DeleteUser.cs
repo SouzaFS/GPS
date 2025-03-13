@@ -34,7 +34,7 @@ namespace UnitTests.UnitTests.Services.GraphQL{
                 
             _mockedBaseRepository
                 .Setup(rep => rep.DeleteAsync(It.IsAny<UserModel>()))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(true);
 
             //Act
             var serviceResult = await _userMutation.DeleteUser(userModel.Id);

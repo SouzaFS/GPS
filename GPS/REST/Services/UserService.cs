@@ -3,8 +3,6 @@ using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
 using GPS.REST.Services.Interfaces;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace GPS.REST.Services
 {
@@ -72,8 +70,8 @@ namespace GPS.REST.Services
         {
             var userModel = await GetUserById(id);
             if(userModel != null){
-                await _baseRepository.DeleteAsync(userModel);
-                return true;
+                var result = await _baseRepository.DeleteAsync(userModel);    
+                return result;
             }
 
             return false;

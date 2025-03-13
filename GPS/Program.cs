@@ -25,7 +25,7 @@ builder.Services.Configure<DBSettings>(
 
 //REST API Scoped's
 builder.Services
-    .AddScoped<AppDBContext<UserModel>>()
+    .AddScoped<IAppDBContext<UserModel>, AppDBContext<UserModel>>()
     .AddScoped<IBaseRepository<UserModel>, BaseRepository<UserModel>>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<IProducer, Producer>();

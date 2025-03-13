@@ -32,7 +32,7 @@ namespace UnitTests.UnitTests.Services.REST{
                 
             _mockedBaseRepository
                 .Setup(rep => rep.DeleteAsync(It.IsAny<UserModel>()))
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(true);
 
             //Act
             var serviceResult = await _userService.DeleteUser(userModel.Id);
