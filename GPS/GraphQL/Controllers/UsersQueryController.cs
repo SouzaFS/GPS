@@ -15,9 +15,12 @@ namespace GPS.GraphQL.Controllers{
         public async Task<IGraphQLResult> GetUsers(){
             try{
                 var users = await _userQuery.GetUsers();
-                if(users.Count > 0){
-                    return GraphQL<List<UserModel>>.Ok(users);
+                if (users != null){
+                    if(users.Count > 0){
+                        return GraphQL<List<UserModel>>.Ok(users);
+                    }
                 }
+                
 
                 return GraphQL<List<UserModel>>.NotFound();
 

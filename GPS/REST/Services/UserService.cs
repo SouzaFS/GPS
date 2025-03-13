@@ -3,8 +3,6 @@ using GPS.Mappers;
 using GPS.Models;
 using GPS.Repositories.Interfaces;
 using GPS.REST.Services.Interfaces;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace GPS.REST.Services
 {
@@ -17,27 +15,32 @@ namespace GPS.REST.Services
             _baseRepository = baseRepository;
         }
 
-        public async Task<UserModel> CreateUser(UserDTO userDTO)
+        public async Task<UserModel?> CreateUser(UserDTO userDTO)
         {
-            var userModel = UserMapper.FromDTOToModel(userDTO);
-            
-            if (userModel != null){
-                return await _baseRepository.CreateAsync(userModel);
+            if (userDTO != null){
+                var userModel = UserMapper.FromDTOToModel(userDTO);
+                var user = await _baseRepository.CreateAsync(userModel);
+                if (user != null){
+                    return user;
+                }
             }
-
+            
             return null;
         }
 
-        public async Task<List<UserModel>> GetUsers()
+        public async Task<List<UserModel>?> GetUsers()
         {
-            var users = await _baseRepository.GetAll().ToListAsync();
-            return users;
+            var users = await _baseRepository.GetAll();
+            if (users != null){
+                return users;
+            }
+            
+            return null;
         }
 
-        public async Task<UserModel> GetUserById(string id)
+        public async Task<UserModel?> GetUserById(string id)
         {
-            var userModel = await _baseRepository.GetByWhere(a => a.Id == id).FirstOrDefaultAsync();
-            
+            var userModel = await _baseRepository.GetByWhere(a => a.Id == id);
             if (userModel != null){
                 return userModel;
             }
@@ -45,14 +48,19 @@ namespace GPS.REST.Services
             return null;
         }
 
-        public async Task<UserModel> UpdateUser(string id, UserDTO userDTO)
+        public async Task<UserModel?> UpdateUser(string id, UserDTO userDTO)
         {
-            var userModel = await GetUserById(id);
-            var user = UserMapper.FromDTOToExistingModel(userModel, userDTO);
-            
-            var result = await _baseRepository.UpdateAsync(user);
-            if (result != null){
-                return result;
+            if (userDTO != null){
+                
+                var userModel = await GetUserById(id);
+                if (userModel != null){
+                    
+                    var user = UserMapper.FromDTOToExistingModel(userModel, userDTO);
+                    var result = await _baseRepository.UpdateAsync(user);
+                    if (result != null){
+                        return result;
+                    }
+                }
             }
 
             return null;
@@ -62,8 +70,8 @@ namespace GPS.REST.Services
         {
             var userModel = await GetUserById(id);
             if(userModel != null){
-                await _baseRepository.DeleteAsync(userModel);
-                return true;
+                var result = await _baseRepository.DeleteAsync(userModel);    
+                return result;
             }
 
             return false;
@@ -71,4 +79,5 @@ namespace GPS.REST.Services
         }
         
     }
+
 }

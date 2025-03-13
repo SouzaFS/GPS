@@ -6,8 +6,7 @@ namespace GPS.Mappers
     public class UserMapper
     {
         public static UserDTO FromModelToDTO(UserModel userModel)
-        {
-            
+        {                        
             return new UserDTO
             {
                 FirstName = userModel.FirstName,
@@ -15,6 +14,7 @@ namespace GPS.Mappers
                 Username = userModel.Username,
                 Email = userModel.Email,
                 FederalID = userModel.FederalID,
+                Nationality = userModel.Nationality,
                 Location = userModel.Location != null ? LocationMapper.FromModelToDTO(userModel.Location) : null
             };
         }
@@ -29,6 +29,7 @@ namespace GPS.Mappers
                 Username = userDTO.Username,
                 Email = userDTO.Email,
                 FederalID = userDTO.FederalID,
+                Nationality = userDTO.Nationality,
                 Location = userDTO.Location != null ? LocationMapper.FromDTOToModel(userDTO.Location) : null
             };
         }
@@ -43,6 +44,7 @@ namespace GPS.Mappers
                 Username = userDTO.Username ?? userModel.Username,
                 Email = userDTO.Email ?? userModel.Email,
                 FederalID = userDTO.FederalID ?? userModel.FederalID,
+                Nationality = userDTO.Nationality ?? userModel.Nationality,
                 Location = userDTO.Location != null ? LocationMapper.FromDTOToModel(userDTO.Location) : userModel.Location
             };
         }

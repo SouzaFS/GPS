@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace GPS.DBContext{
 
-    public class AppDBContext<T> where T : class {
+    public class AppDBContext<T> : IAppDBContext<T> where T : class {
         
         private readonly IMongoDatabase _database;
 
